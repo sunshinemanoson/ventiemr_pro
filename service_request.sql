@@ -6,5 +6,9 @@ FROM            ventiemr.encounter_procedure AS ep LEFT OUTER JOIN
                          ventiemr.encounter_service_request AS esr ON ep.based_on = esr.id LEFT OUTER JOIN
                          ventiemr.service_request AS sr ON esr.service_request_id = sr.id LEFT OUTER JOIN
                          ventiemr.service_request_status AS srs ON esr.current_status_id = srs.id
+where  ep.encounter_id IN(
+
+    SELECT distinct  ep.encounter_id FROM  [StgPanda].[ventiemr].[encounter_procedure]
 WHERE        (CAST(esr.created_at AS date) >= CAST(GETDATE() - 3 AS date)) OR
                          (CAST(esr.updated_at AS date) >= CAST(GETDATE() - 3 AS date))
+)

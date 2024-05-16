@@ -7,7 +7,10 @@ FROM            ventiemr.encounter_procedure AS ep LEFT OUTER JOIN
                          ventiemr.condition_category AS cc ON ec.category_id = cc.id LEFT OUTER JOIN
                          ventiemr.condition_verification_status AS cvs ON ec.verification_status_id = cvs.id LEFT OUTER JOIN
                          ventiemr.condition AS c ON c.id = ec.condition_id
+where encounter_id IN(
+
+SELECT distinct encounter_id FROM  [StgPanda].[ventiemr].[encounter_procedure]
 where  cast(ep.created_at as date) >= cast(getdate()-3 as date)  
   or
 	     cast(ep.updated_at as date) >= cast(getdate()-3 as date)
- 
+)

@@ -3,6 +3,10 @@ FROM            ventiemr.encounter_service_request AS esr LEFT OUTER JOIN
                          ventiemr.service_request AS sr ON esr.service_request_id = sr.id LEFT OUTER JOIN
                          ventiemr.encounter_service_request_status AS esrs ON esr.id = esrs.encounter_service_request_id LEFT OUTER JOIN
                          ventiemr.service_request_status AS srs ON esrs.service_request_status_id = srs.id
+where  esr.encounter_id IN(
+
+    SELECT distinct  esr.encounter_id FROM  [StgPanda].[ventiemr].[encounter_service_request]
 WHERE        (esr.id IS NOT NULL) AND  cast( esrs.created_at as date) >= cast(getdate()-3 as date)  
   or
 	     cast( esrs.updated_at as date) >= cast(getdate()-3 as date)
+)

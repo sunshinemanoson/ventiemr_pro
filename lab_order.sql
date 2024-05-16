@@ -10,7 +10,11 @@ WITH observation_verification_status AS (SELECT        id, name
                               observation_verification_status AS ovs2 ON ovs2.id = loi.verification_status_id LEFT OUTER JOIN
                               ventiemr.lab_order_specimen AS los ON los.lab_order_item_id = loi.id LEFT OUTER JOIN
                               observation_verification_status AS ovs3 ON ovs3.id = los.verification_status_id
+    where lo.encounter_id IN(
+
+    SELECT distinct lo.encounter_id FROM  [StgPanda].[ventiemr].[lab_order]
                               where  cast(lo.created_at as date) >= cast(getdate()-3 as date)  
-  or
-	     cast(los.created_at as date) >= cast(getdate()-3 as date)
+            or
+	                        cast(los.created_at as date) >= cast(getdate()-3 as date)
+    )
 

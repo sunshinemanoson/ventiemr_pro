@@ -13,6 +13,10 @@ FROM            ventiemr.encounter_observation_form_record AS eofr LEFT OUTER JO
                          ventiemr.encounter_observation_form_record_item AS eofri ON eofr.id = eofri.based_on LEFT OUTER JOIN
                          ventiemr.observation_form_item AS ofi ON eofri.observation_form_item_id = ofi.id LEFT OUTER JOIN
                          ventiemr.observation AS o2 ON ofi.observation_id = o2.id
+where eofr.encounter_id IN(
+
+    SELECT distinct eofr.encounter_id FROM  [StgPanda].[ventiemr].[encounter_observation_form_record]
                          where  cast( eofri.created_at as date) >= cast(getdate()-3 as date)  
   or
 	     cast( eofri.updated_at as date) >= cast(getdate()-3 as date)
+)

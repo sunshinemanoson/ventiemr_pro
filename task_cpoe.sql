@@ -8,5 +8,9 @@ FROM            ventiemr.task_cpoe AS tc LEFT OUTER JOIN
                          ventiemr.task_cpoe_relation AS tcr ON tcr.task_cpoe_id = tc.id LEFT OUTER JOIN
                          ventiemr.request_priority AS rp ON rp.id = tc.priority_id LEFT OUTER JOIN
                          ventiemr.task_status AS ts2 ON ts2.id = tcr.status_id
+where  tc.encounter_id IN(
+
+    SELECT distinct  tc.encounter_id FROM  [StgPanda].[ventiemr].[encounter_procedure]
 WHERE        (CAST(tc.created_at AS date) >= CAST(GETDATE() - 3 AS date)) OR
                          (CAST(tc.updated_at AS date) >= CAST(GETDATE() - 3 AS date))
+)
