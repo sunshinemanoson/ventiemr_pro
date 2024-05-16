@@ -15,3 +15,10 @@ FROM            ventiemr.radiology_order AS ro LEFT OUTER JOIN
                          ventiemr.imaging_study_status AS iss4 ON iss4.id = ros.imaging_study_status_id LEFT OUTER JOIN
                          ventiemr.radiology_order_set_region_relation AS rosrr ON rosrr.rad_order_set_id = ros.id LEFT OUTER JOIN
                          ventiemr.radiology_order_region AS ror2 ON ror2.id = rosrr.rad_order_region_id
+where ro.encounter_id IN(
+
+    SELECT distinct ro.encounter_id FROM  [StgPanda].[ventiemr].[encounter_observation_form_record]
+                         where  cast( ro.created_at as date) >= cast(getdate()-3 as date)  
+  or
+	     cast( ro.updated_at as date) >= cast(getdate()-3 as date)
+)
